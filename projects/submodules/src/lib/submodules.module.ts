@@ -1,12 +1,25 @@
-import { NgModule } from '@angular/core';
-import { SubmodulesComponent } from './submodules.component';
+import { ModuleWithProviders, NgModule, Type } from '@angular/core';
+import { LAZY_SUBMODULES, SubmoduleRootModuleConfig, SUBMODULE_ROOT_MODULE_CONFIG } from './config';
+import { LazySubmodules } from './interfaces';
+import { SubmoduleFeatureModule } from './submodule-feature.module';
+import { SubmoduleRootModule } from './submodule-root.module';
 
+@NgModule()
+export class SubmodulesModule {
+  static forFeature(): Type<any> {
+    return SubmoduleFeatureModule;
+  }
 
-
-@NgModule({
-  declarations: [SubmodulesComponent],
-  imports: [
-  ],
-  exports: [SubmodulesComponent]
-})
-export class SubmodulesModule { }
+  static forRoot(
+    lazySubmodules: LazySubmodules,
+    config?: SubmoduleRootModuleConfig
+  ): ModuleWithProviders<SubmoduleRootModule> {
+    return {
+      ngModule: SubmoduleRootModule,
+      providers: [
+        { provide: LAZY_SUBMODULES, useValue: lazySubmodules },
+        { provide: SUBMODULE_ROOT_MODULE_CONFIG, useValue: config }
+      ]
+    };
+  }
+}
