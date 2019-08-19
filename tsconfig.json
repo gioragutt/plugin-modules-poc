@@ -30,6 +30,12 @@
       ],
       "submodules/*": [
         "dist/submodules/*"
+      ],
+      "forms-registry": [
+        "dist/forms-registry"
+      ],
+      "forms-registry/*": [
+        "dist/forms-registry/*"
       ]
     }
   },

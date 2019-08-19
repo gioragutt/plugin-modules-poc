@@ -195,6 +195,41 @@
           }
         }
       }
+    },
+    "forms-registry": {
+      "projectType": "library",
+      "root": "projects/forms-registry",
+      "sourceRoot": "projects/forms-registry/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/forms-registry/tsconfig.lib.json",
+            "project": "projects/forms-registry/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/forms-registry/src/test.ts",
+            "tsConfig": "projects/forms-registry/tsconfig.spec.json",
+            "karmaConfig": "projects/forms-registry/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/forms-registry/tsconfig.lib.json",
+              "projects/forms-registry/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "lazy-loading-modules"
