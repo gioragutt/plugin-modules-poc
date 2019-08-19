@@ -7,17 +7,21 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LazyFeatureModule, LazyFeatures } from 'projects/lazy-feature';
 import { FormRepositoryComponentDirective } from './form-repository-component.directive';
 
-const features: LazyFeatures = [
+export const features: LazyFeatures = [
   {
-    module: () => import('./feature1/feature1.module').then(m => m.Feature1Module),
+    loadChildren: () => import('./feature1/feature1.module').then(m => m.Feature1Module),
     name: 'feature1',
     // canActivate: ['returnFalse'],
   },
   {
-    module: () => import('./feature2/feature2.module').then(m => m.Feature2Module),
+    loadChildren: () => import('./feature2/feature2.module').then(m => m.Feature2Module),
     name: 'feature2',
   }
 ];
+
+export function returnFalse() {
+  return false;
+}
 
 @NgModule({
   declarations: [
@@ -32,7 +36,7 @@ const features: LazyFeatures = [
   ],
   providers: [{
     provide: 'returnFalse',
-    useValue: () => false,
+    useValue: returnFalse,
   }],
   bootstrap: [AppComponent]
 })

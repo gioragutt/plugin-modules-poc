@@ -7,7 +7,6 @@ import { BootstrapperService } from './bootstrapper.service';
 @NgModule()
 export class LazyFeatureModule {
   static forFeature(config: LazyFeatureConfig): ModuleWithProviders {
-    console.log('[LazyFeatureModule] forFeature(', config, ')');
     return {
       ngModule: LazyFeatureModule,
       providers: [
@@ -20,7 +19,6 @@ export class LazyFeatureModule {
   }
 
   static forRoot(features: LazyFeature[]): ModuleWithProviders {
-    console.log('[LazyFeatureModule] forRoot(', features, ')');
     return {
       ngModule: LazyFeatureModule,
       providers: [
