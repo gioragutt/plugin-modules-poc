@@ -160,6 +160,41 @@
           }
         }
       }
+    },
+    "submodules": {
+      "projectType": "library",
+      "root": "projects/submodules",
+      "sourceRoot": "projects/submodules/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/submodules/tsconfig.lib.json",
+            "project": "projects/submodules/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/submodules/src/test.ts",
+            "tsConfig": "projects/submodules/tsconfig.spec.json",
+            "karmaConfig": "projects/submodules/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/submodules/tsconfig.lib.json",
+              "projects/submodules/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "lazy-loading-modules"
