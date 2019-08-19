@@ -6,18 +6,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { Feature3Module } from './feature3/feature3.module';
 import { FormRepositoryComponentDirective } from './form-repository-component.directive';
-
-export const features: LazySubmodules = [
-  {
-    loadChildren: () => import('./feature1/feature1.module').then(m => m.Feature1Module),
-    name: 'feature1',
-    // canActivate: ['returnFalse'],
-  },
-  {
-    loadChildren: () => import('./feature2/feature2.module').then(m => m.Feature2Module),
-    name: 'feature2',
-  }
-];
+import { FormsRegistryModule } from 'projects/forms-registry';
+import { AppSubmodulesModule } from './app-submodules.module';
 
 @NgModule({
   declarations: [
@@ -28,7 +18,8 @@ export const features: LazySubmodules = [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    SubmodulesModule.forRoot(features),
+    AppSubmodulesModule,
+    FormsRegistryModule.forRoot(),
     Feature3Module,
   ],
   providers: [{
