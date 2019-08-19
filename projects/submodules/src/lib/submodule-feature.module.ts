@@ -5,7 +5,8 @@ import { SubmoduleRootModule } from './submodule-root.module';
 export class SubmoduleFeatureModule {
   constructor(
     moduleRef: NgModuleRef<any>,
-    root: SubmoduleRootModule) {
+    root: SubmoduleRootModule
+  ) {
     root.registerFeature(moduleRef);
   }
 }

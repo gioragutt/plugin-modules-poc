@@ -1,31 +1,24 @@
-import { NgModule, NgModuleRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormEntries, FormsRegistryModule } from 'projects/forms-registry';
+import { SubmodulesModule } from 'projects/submodules';
 import { Feature3PageComponent } from './feature3-page/feature3-page.component';
-import { LazyFeatureConfig, LazyFeatureModule, FeatureConfigLoaderService } from 'projects/lazy-feature';
 
-const featureConfig: LazyFeatureConfig = {
-  forms: [
-    {
-      category: 'Comm',
-      component: Feature3PageComponent,
-      name: 'Kapara'
-    }
-  ]
-};
+const forms: FormEntries = [
+  {
+    category: 'Comm',
+    component: Feature3PageComponent,
+    name: 'Kapara'
+  }
+];
 
 @NgModule({
   declarations: [Feature3PageComponent],
   imports: [
     CommonModule,
-    LazyFeatureModule.forFeature(featureConfig),
+    FormsRegistryModule.forFeature(forms),
+    SubmodulesModule.forFeature(),
   ],
   entryComponents: [Feature3PageComponent],
 })
-export class Feature3Module {
-  constructor(
-    moduleRef: NgModuleRef<Feature3Module>,
-    configLoader: FeatureConfigLoaderService,
-  ) {
-    configLoader.load(moduleRef, 'feature3');
-  }
-}
+export class Feature3Module { }

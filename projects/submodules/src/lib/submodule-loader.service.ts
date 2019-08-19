@@ -1,7 +1,7 @@
 import { Compiler, Injectable, Injector, NgModuleFactory } from '@angular/core';
 import { from, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { LoadedLazySubmodule } from './config';
+import { LoadedLazySubmodule, LAZY_SUBMODULES } from './config';
 import { LazySubmodule } from './interfaces';
 import { checkGuards } from './operators';
 import { wrapIntoObservable } from './utils/collections';
@@ -10,7 +10,15 @@ import { wrapIntoObservable } from './utils/collections';
   providedIn: 'root'
 })
 export class SubmoduleLoaderService {
-  constructor(private injector: Injector, private compiler: Compiler) { }
+  constructor(
+    private injector: Injector,
+    private compiler: Compiler,
+  ) { }
+
+  lazyLoadSubmodules(): Observable<LoadedLazySubmodule> {
+    const lazySubmodules = this.injector.get(LAZY_SUBMODULES);
+    return from(lazySubmodules).pipe(mergeMap(m => this.loadModule(m)));
+  }
 
   loadModule(submodule: LazySubmodule): Observable<LoadedLazySubmodule> {
     return of(submodule).pipe(

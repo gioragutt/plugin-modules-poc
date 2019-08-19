@@ -1,7 +1,9 @@
 import { NgModule, NgModuleRef, Inject, Optional, InjectionToken } from '@angular/core';
 import { SubmoduleBootstrapperService } from './submodule-bootstrapper.service';
+import { SubmoduleLoaderService } from './submodule-loader.service';
 
 export interface SubmoduleRootModuleConfig {
+  lazyLoadImmediately?: boolean;
   boostrapImmediately?: boolean;
 }
 export const SUBMODULE_ROOT_MODULE_CONFIG =
@@ -9,6 +11,7 @@ export const SUBMODULE_ROOT_MODULE_CONFIG =
 
 const DEFAULT_CONFIG: SubmoduleRootModuleConfig = {
   boostrapImmediately: true,
+  lazyLoadImmediately: true,
 };
 
 @NgModule()
@@ -18,14 +21,23 @@ export class SubmoduleRootModule {
   constructor(
     @Optional() @Inject(SUBMODULE_ROOT_MODULE_CONFIG) config: SubmoduleRootModuleConfig,
     private boostrapper: SubmoduleBootstrapperService,
+    private loader: SubmoduleLoaderService,
   ) {
     config = config || {};
     this.config = { ...DEFAULT_CONFIG, ...config };
+
+    this.lazyLoadIfNeeded();
+  }
+
+  private lazyLoadIfNeeded() {
+    if (this.config.lazyLoadImmediately) {
+      this.loader.lazyLoadSubmodules().subscribe();
+    }
   }
 
   registerFeature(moduleRef: NgModuleRef<any>) {
     if (this.config.boostrapImmediately) {
-      this.boostrapper.bootstrap(moduleRef);
+      this.boostrapper.bootstrap(moduleRef).subscribe();
     } else {
       this.boostrapper.save(moduleRef);
     }

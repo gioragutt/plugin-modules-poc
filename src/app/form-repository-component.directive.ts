@@ -1,5 +1,5 @@
 import { Directive, Input, Type, ViewContainerRef } from '@angular/core';
-import { FormsRepository } from 'projects/lazy-feature';
+import { FormsRegistryService } from 'projects/forms-registry';
 
 @Directive({
   selector: '[appFormRepsitoryComponent]',
@@ -16,13 +16,13 @@ export class FormRepositoryComponentDirective<T> {
 
   constructor(
     private container: ViewContainerRef,
-    private formsRepository: FormsRepository
+    private formsRegistry: FormsRegistryService
   ) { }
 
   createComponent(componentType: Type<any>): void {
     this.container.clear();
     if (componentType) {
-      const cf = this.formsRepository.resolveComponentFactory(componentType);
+      const cf = this.formsRegistry.resolveComponentFactory(componentType);
       this.container.createComponent(cf);
     }
   }

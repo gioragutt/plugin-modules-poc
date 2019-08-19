@@ -1,5 +1,5 @@
 import { Component, Type } from '@angular/core';
-import { BootstrapperService, FormsRepository } from 'projects/lazy-feature';
+import { FormsRegistryService } from 'projects/forms-registry';
 import { Observable, OperatorFunction } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -24,15 +24,11 @@ export function groupBy<T, K>(keySelector: (t: T) => K): OperatorFunction<T[], R
 })
 export class AppComponent {
   title = 'lazy-loading-modules';
-  formEntries$ = this.formsRepo.formEntries$().pipe(
+  formEntries$ = this.formsRegistry.formEntries$().pipe(
     groupBy(f => f.category),
   );
 
   pickedComponent: Type<any>;
 
-  constructor(boostrapperService: BootstrapperService, private formsRepo: FormsRepository) {
-    boostrapperService.boostrap().subscribe(feature => {
-      console.log(`Feature ${feature.feature.name} loaded`);
-    });
-  }
+  constructor(private formsRegistry: FormsRegistryService) { }
 }

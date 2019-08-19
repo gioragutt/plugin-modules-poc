@@ -1,14 +1,13 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LazySubmodules, SubmodulesModule } from 'projects/submodules';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LazyFeatureModule, LazyFeatures } from 'projects/lazy-feature';
-import { FormRepositoryComponentDirective } from './form-repository-component.directive';
 import { Feature3Module } from './feature3/feature3.module';
+import { FormRepositoryComponentDirective } from './form-repository-component.directive';
 
-export const features: LazyFeatures = [
+export const features: LazySubmodules = [
   {
     loadChildren: () => import('./feature1/feature1.module').then(m => m.Feature1Module),
     name: 'feature1',
@@ -29,7 +28,7 @@ export const features: LazyFeatures = [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    LazyFeatureModule.forRoot(features),
+    SubmodulesModule.forRoot(features),
     Feature3Module,
   ],
   providers: [{
