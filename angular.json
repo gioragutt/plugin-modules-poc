@@ -128,39 +128,6 @@
         }
       }
     },
-    "lazy-feature": {
-      "projectType": "library",
-      "root": "projects/lazy-feature",
-      "sourceRoot": "projects/lazy-feature/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/lazy-feature/tsconfig.lib.json",
-            "project": "projects/lazy-feature/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/lazy-feature/src/test.ts",
-            "tsConfig": "projects/lazy-feature/tsconfig.spec.json",
-            "karmaConfig": "projects/lazy-feature/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/lazy-feature/tsconfig.lib.json",
-              "projects/lazy-feature/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
-        }
-      }
-    },
     "submodules": {
       "projectType": "library",
       "root": "projects/submodules",
@@ -189,9 +156,7 @@
               "projects/submodules/tsconfig.lib.json",
               "projects/submodules/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -224,9 +189,7 @@
               "projects/forms-registry/tsconfig.lib.json",
               "projects/forms-registry/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
