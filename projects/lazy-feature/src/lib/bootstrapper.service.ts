@@ -22,7 +22,7 @@ export class BootstrapperService {
   boostrap(): Observable<LoadedLazyFeature> {
     return from(this.lazyFeatures).pipe(
       mergeMap(feature => this.moduleLoader.loadModule(feature)),
-      tap(loaded => this.configLoader.load(loaded)),
+      tap(loaded => this.configLoader.load(loaded.module, loaded.feature.name)),
       tap(loaded => console.log(`[BootstrapperService] loaded ${loaded.feature.name}`))
     );
   }
