@@ -19,10 +19,6 @@ export const features: LazyFeatures = [
   }
 ];
 
-export function returnFalse() {
-  return false;
-}
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +32,7 @@ export function returnFalse() {
   ],
   providers: [{
     provide: 'returnFalse',
-    useValue: returnFalse,
+    useValue: () => false,
   }],
   bootstrap: [AppComponent]
 })

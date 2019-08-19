@@ -1,5 +1,5 @@
-import { Injectable, Injector, NgModuleFactory } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Injectable, Injector, NgModuleFactory, Compiler } from '@angular/core';
+import { Observable, of, from } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { LoadedLazyFeature, LazyFeature } from './config';
 import { wrapIntoObservable } from './utils/collections';
@@ -9,7 +9,10 @@ import { checkGuards } from './operators';
   providedIn: 'root'
 })
 export class FeatureModuleLoaderService {
-  constructor(private injector: Injector) { }
+  constructor(
+    private injector: Injector,
+    private compiler: Compiler,
+  ) { }
 
   loadModule(feature: LazyFeature): Observable<LoadedLazyFeature> {
     console.log(`[FeatureModuleLoaderService] loadModule(${feature.name})`);
@@ -29,11 +32,17 @@ export class FeatureModuleLoaderService {
   private loadModuleFactory({ loadChildren: module, name }: LazyFeature): Observable<NgModuleFactory<any>> {
     return wrapIntoObservable(module()).pipe(
       mergeMap(t => {
-        console.log(t);
         if (t instanceof NgModuleFactory) {
+          // AOT
           return of(t);
         }
-        throw new Error(`Module ${name} exported incorrectly. An NgModule or NgModuleFactory should be exported`);
+
+        try {
+          // JIT
+          return from(this.compiler.compileModuleAsync(t));
+        } catch (e) {
+          throw new Error(`Module ${name} exported incorrectly. An NgModule or NgModuleFactory should be exported`);
+        }
       }),
     );
   }
