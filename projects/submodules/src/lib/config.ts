@@ -8,12 +8,6 @@ export class LoadedLazySubmodule {
   ) { }
 }
 
-export interface SubmoduleRootModuleConfig {
-  boostrapImmediately?: boolean;
-}
-export const SUBMODULE_ROOT_MODULE_CONFIG =
-  new InjectionToken<SubmoduleRootModuleConfig>('SUBMODULE_ROOT_MODULE_CONFIG');
-
 export const LAZY_SUBMODULES = new InjectionToken<LazySubmodule[]>('LAZY_SUBMODULES');
 export const SUBMOUDLE_PROCESSORS = new InjectionToken<SubmoduleProcessor[]>('SUBMOUDLE_PROCESSORS');
 
