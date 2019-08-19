@@ -12,7 +12,7 @@ export interface LazyFeatureConfig {
 }
 
 export interface LazyFeature {
-  module: LoadChildrenCallback;
+  loadChildren: LoadChildrenCallback;
   canActivate?: any[];
   name: string;
 }

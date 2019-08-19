@@ -1,9 +1,9 @@
-import { Component, TemplateRef, Type } from '@angular/core';
+import { Component, Type } from '@angular/core';
 import { BootstrapperService, FormsRepository } from 'projects/lazy-feature';
 import { Observable, OperatorFunction } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-function groupBy<T, K>(keySelector: (t: T) => K): OperatorFunction<T[], Record<any, T[]>> {
+export function groupBy<T, K>(keySelector: (t: T) => K): OperatorFunction<T[], Record<any, T[]>> {
   return (source: Observable<T[]>) => source.pipe(
     map((values: T[]) => {
       return values.reduce((acc, v) => {

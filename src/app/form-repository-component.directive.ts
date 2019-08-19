@@ -19,10 +19,10 @@ export class FormRepositoryComponentDirective<T> {
     private formsRepository: FormsRepository
   ) { }
 
-  createComponent(content: Type<any>): void {
+  createComponent(componentType: Type<any>): void {
     this.container.clear();
-    if (content) {
-      const cf = this.formsRepository.resolveComponentFactory(content);
+    if (componentType) {
+      const cf = this.formsRepository.resolveComponentFactory(componentType);
       this.container.createComponent(cf);
     }
   }
