@@ -1,4 +1,4 @@
-import { Type } from '@angular/core';
+import { Type, ViewRef } from '@angular/core';
 
 export interface FormEntry<T = any> {
   component: Type<T>;
@@ -7,3 +7,8 @@ export interface FormEntry<T = any> {
 }
 
 export type FormEntries = FormEntry[];
+
+export interface FormFromView<T = any> {
+  viewRef: ViewRef;
+  formEntry: FormEntry<T>;
+}

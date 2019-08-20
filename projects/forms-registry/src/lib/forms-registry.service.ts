@@ -1,4 +1,4 @@
-import { ComponentFactory, Injectable, Type } from '@angular/core';
+import { ComponentFactory, Injectable, Type, ComponentFactoryResolver } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FormEntry } from './interfaces';
@@ -11,7 +11,7 @@ export interface RepositoryEntry<T = any> {
 @Injectable({
   providedIn: 'root'
 })
-export class FormsRegistryService {
+export class FormsRegistryService implements ComponentFactoryResolver {
   private repositoryEntries = new BehaviorSubject<RepositoryEntry[]>([]);
 
   formEntries$(): Observable<FormEntry[]> {
@@ -25,8 +25,12 @@ export class FormsRegistryService {
     this.repositoryEntries.next(next);
   }
 
+  getEntry<T>(component: Type<T>): RepositoryEntry {
+    return this.repositoryEntries.value.find(e => e.formEntry.component === component);
+  }
+
   resolveComponentFactory<T>(component: Type<T>): ComponentFactory<T> | null {
-    const entry = this.repositoryEntries.value.find(e => e.formEntry.component === component);
+    const entry = this.getEntry(component);
     return entry ? entry.componentFactory : null;
   }
 }

@@ -3,11 +3,11 @@ import { provideSubmoduleProcessor } from 'projects/submodules';
 import { FORM_ENTRIES } from './config';
 import { FormsRegistryProcessorService } from './forms-registry-processor.service';
 import { FormEntries } from './interfaces';
-import { FormRepositoryComponentDirective } from './form-registry-component.directive';
+import { FormRegistryComponentDirective } from './form-registry-component.directive';
 
 @NgModule({
-  declarations: [FormRepositoryComponentDirective],
-  exports: [FormRepositoryComponentDirective],
+  declarations: [FormRegistryComponentDirective],
+  exports: [FormRegistryComponentDirective],
 })
 export class FormsRegistryModule {
   static forFeature(formEntries: FormEntries): ModuleWithProviders<FormsRegistryModule> {
