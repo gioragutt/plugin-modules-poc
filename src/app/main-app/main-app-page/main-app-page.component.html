@@ -1,7 +1,9 @@
 <app-shell (formClick)="onFormClick($event)">
   <div class="content">
-    <button mat-button (click)="load()">Load!!</button>
-    <mat-divider *ngIf="c.loaded"></mat-divider>
+    <h2>Your Forms will be shown here</h2>
+    <div *ngIf="c.loaded" class="divider">
+      <mat-divider></mat-divider>
+    </div>
     <div [class.loaded]="c.loaded">
       <ng-template [libFormRegistryComponent]="selectedForm" #c="libFormRegistryComponent">
       </ng-template>

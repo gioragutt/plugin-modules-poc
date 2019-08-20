@@ -8,15 +8,7 @@ import { SubmoduleLoaderService } from 'projects/submodules';
   styleUrls: ['./main-app-page.component.scss']
 })
 export class MainAppPageComponent {
-  constructor(private loader: SubmoduleLoaderService) {
-  }
-
   selectedForm: Type<any>;
-
-  load() {
-    this.loader.lazyLoadSubmodules().subscribe(
-      module => console.log('loaded', module.submodule.name));
-  }
 
   onFormClick(event: FormEntry): void {
     this.selectedForm = event.component;

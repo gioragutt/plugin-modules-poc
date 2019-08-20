@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormEntry, FormsRegistryService } from 'projects/forms-registry';
-import { map } from 'rxjs/operators';
+import { SubmoduleLoaderService } from 'projects/submodules';
+import { map, finalize, tap } from 'rxjs/operators';
+import { defer } from 'rxjs';
 
 export function groupArrayBy<T, K>(keySelector: (t: T) => K): (values: T[]) => Record<any, T[]> {
   return (values: T[]) => {
@@ -26,6 +28,20 @@ export class ShellComponent {
   );
 
   @Output() formClick = new EventEmitter<FormEntry>();
+  loaded = false;
 
-  constructor(private formsRegistry: FormsRegistryService) { }
+  constructor(
+    private formsRegistry: FormsRegistryService,
+    private loader: SubmoduleLoaderService,
+  ) { }
+
+  loadLazyModules() {
+    defer(() => {
+      this.loaded = false;
+      return this.loader.lazyLoadSubmodules();
+    }).pipe(
+      finalize(() => this.loaded = true),
+      tap(module => console.log('Loaded', module.submodule.name)),
+    ).subscribe();
+  }
 }

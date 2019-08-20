@@ -11,9 +11,15 @@
   </mat-menu>
 
   <button mat-icon-button [matMenuTriggerFor]="categoriesMenu">
-    <mat-icon>more_vert</mat-icon>
+    <mat-icon>tab</mat-icon>
   </button>
   <span>Main App</span>
+  <span style="flex: 1"></span>
+  <span>
+    <button mat-icon-button (click)="loadLazyModules()" color="accent">
+      <mat-icon>{{loaded ? 'cloud_done' : 'cloud_download'}}</mat-icon>
+    </button>
+  </span>
 </mat-toolbar>
 
 <mat-card class="page-content">
