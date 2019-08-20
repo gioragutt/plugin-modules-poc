@@ -1,8 +1,8 @@
 import { ModuleWithProviders, NgModule, Type } from '@angular/core';
 import { LAZY_SUBMODULES } from './config';
-import { LazySubmodules } from './interfaces';
+import { LazySubmodules, SubmoduleRootModuleConfig } from './interfaces';
 import { SubmoduleFeatureModule } from './submodule-feature.module';
-import { SubmoduleRootModule, SubmoduleRootModuleConfig, SUBMODULE_ROOT_MODULE_CONFIG } from './submodule-root.module';
+import { SubmoduleRootModule, SUBMODULE_ROOT_MODULE_CONFIG } from './submodule-root.module';
 
 @NgModule()
 export class SubmodulesModule {

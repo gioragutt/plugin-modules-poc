@@ -3,6 +3,11 @@ import { LoadChildrenCallback } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MaybeAsync } from './utils/collections';
 
+export interface SubmoduleRootModuleConfig {
+  lazyLoadImmediately?: boolean;
+  boostrapImmediately?: boolean;
+}
+
 export interface LazySubmodule {
   loadChildren: LoadChildrenCallback;
   canLoad?: (Type<any> | InjectionToken<any>)[];

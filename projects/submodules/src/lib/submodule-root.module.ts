@@ -1,11 +1,8 @@
 import { NgModule, NgModuleRef, Inject, Optional, InjectionToken } from '@angular/core';
 import { SubmoduleBootstrapperService } from './submodule-bootstrapper.service';
 import { SubmoduleLoaderService } from './submodule-loader.service';
+import { SubmoduleRootModuleConfig } from './interfaces';
 
-export interface SubmoduleRootModuleConfig {
-  lazyLoadImmediately?: boolean;
-  boostrapImmediately?: boolean;
-}
 export const SUBMODULE_ROOT_MODULE_CONFIG =
   new InjectionToken<SubmoduleRootModuleConfig>('SUBMODULE_ROOT_MODULE_CONFIG');
 
