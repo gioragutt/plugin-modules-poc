@@ -3,7 +3,7 @@ import { concat, MonoTypeOperatorFunction, Observable, of } from 'rxjs';
 import { concatMap, defaultIfEmpty, filter, first, mapTo, skipWhile } from 'rxjs/operators';
 import { LazySubmodule } from './interfaces';
 import { wrapIntoObservable } from './utils/collections';
-import { isCanActivate, isFunction } from './utils/type_guard';
+import { isCanLoad, isFunction } from './utils/type_guard';
 
 export function checkGuards(injector: Injector): MonoTypeOperatorFunction<LazySubmodule> {
   return (source: Observable<LazySubmodule>) => {
@@ -19,24 +19,24 @@ export function checkGuards(injector: Injector): MonoTypeOperatorFunction<LazySu
 }
 
 function runCanActive(injector: Injector, submodule: LazySubmodule): Observable<boolean> {
-  if (!submodule.canActivate) {
+  if (!submodule.canLoad) {
     return of(true);
   }
-  const canActivateGuards = submodule.canActivate
+  const canLoadGuards = submodule.canLoad
     .map(token => injector.get(token, null))
     .filter(g => !!g);
 
-  const canActivateObservables = canActivateGuards.map(g => {
-    if (isCanActivate(g)) {
-      return wrapIntoObservable(g.canActivate());
+  const canLoadObservables = canLoadGuards.map(g => {
+    if (isCanLoad(g)) {
+      return wrapIntoObservable(g.canLoad());
     } else if (isFunction<() => boolean>(g)) {
       return wrapIntoObservable(g());
     } else {
-      throw new Error(`Invalid CanActivate guard ${typeof g}`);
+      throw new Error(`Invalid CanLoad guard ${typeof g}`);
     }
   });
 
-  return concat(...canActivateObservables).pipe(
+  return concat(...canLoadObservables).pipe(
     skipWhile(guardResult => !!guardResult),
     defaultIfEmpty(true),
   );
