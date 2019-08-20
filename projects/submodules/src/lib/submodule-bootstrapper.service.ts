@@ -7,13 +7,15 @@ import { mergeMap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class SubmoduleBootstrapperService {
-  private modulesToLoad: NgModuleRef<any>[] = [];
+  private savedModules: NgModuleRef<any>[] = [];
 
   constructor(private processors: SubmodulesProcessorsService) {
   }
 
   bootstrapSaved(): Observable<void> {
-    return from(this.modulesToLoad).pipe(
+    const modules = this.savedModules;
+    this.savedModules = [];
+    return from(modules).pipe(
       mergeMap((module: NgModuleRef<any>) => this.bootstrap(module)),
     );
   }
@@ -23,6 +25,6 @@ export class SubmoduleBootstrapperService {
   }
 
   save(module: NgModuleRef<any>): void {
-    this.modulesToLoad.push(module);
+    this.savedModules.push(module);
   }
 }

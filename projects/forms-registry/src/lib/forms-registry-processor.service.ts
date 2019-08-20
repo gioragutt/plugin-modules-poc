@@ -16,12 +16,11 @@ export class FormsRegistryProcessorService implements SubmoduleProcessor {
   constructor(private formsRegistry: FormsRegistryService) { }
 
   process(moduleRef: NgModuleRef<any>): MaybeAsync<void> {
-    console.log(`[FeatureConfigLoaderService] load(${name})`);
     const formEntries = moduleRef.injector.get(FORM_ENTRIES);
-    this.loadFormsInRepository(moduleRef.componentFactoryResolver, formEntries);
+    this.loadFormsIntoRegistry(moduleRef.componentFactoryResolver, formEntries);
   }
 
-  loadFormsInRepository(componentFactoryResolver: ComponentFactoryResolver, forms: FormEntries[]) {
+  loadFormsIntoRegistry(componentFactoryResolver: ComponentFactoryResolver, forms: FormEntries[]) {
     if (!forms) {
       return;
     }
