@@ -1,0 +1,23 @@
+<mat-toolbar color="primary">
+  <mat-menu #categoriesMenu="matMenu">
+    <ng-container *ngFor="let item of formEntries$ | async | keyvalue">
+      <button mat-menu-item [matMenuTriggerFor]="specificCategoryMenu">{{item.key}}</button>
+      <mat-menu #specificCategoryMenu="matMenu">
+        <button mat-menu-item *ngFor="let entry of item.value" (click)="formClick.emit(entry)">
+          {{entry.name}}
+        </button>
+      </mat-menu>
+    </ng-container>
+  </mat-menu>
+
+  <button mat-icon-button [matMenuTriggerFor]="categoriesMenu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <span>Main App</span>
+</mat-toolbar>
+
+<mat-card class="page-content">
+  <mat-card-content>
+    <ng-content></ng-content>
+  </mat-card-content>
+</mat-card>

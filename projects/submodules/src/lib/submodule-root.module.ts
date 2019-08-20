@@ -29,6 +29,8 @@ export class SubmoduleRootModule {
   private lazyLoadIfNeeded() {
     if (this.config.lazyLoadImmediately) {
       this.loader.lazyLoadSubmodules().subscribe();
+    } else {
+      console.log('lazyLoadImmediately=false');
     }
   }
 

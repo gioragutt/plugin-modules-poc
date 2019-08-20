@@ -13,6 +13,10 @@ export const features: LazySubmodules = [
 ];
 
 @NgModule({
-  imports: [SubmodulesModule.forRoot(features)],
+  imports: [
+    SubmodulesModule.forRoot(features, {
+      lazyLoadImmediately: false,
+    })
+  ],
 })
 export class AppSubmodulesModule { }

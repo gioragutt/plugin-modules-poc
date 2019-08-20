@@ -1,15 +1,1 @@
-<ul>
-  <li *ngFor="let item of formEntries$ | async | keyvalue">
-    {{item.key}}
-    <ul>
-      <li *ngFor="let entry of item.value" (click)="pickedComponent = entry.component">
-        {{entry.name}}
-      </li>
-    </ul>
-  </li>
-</ul>
-<button (click)="pickedComponent = null">Clear</button>
-<div [class.loaded]="c.loaded">
-  <ng-template [appFormRepsitoryComponent]="pickedComponent" #c="appFormRepsitoryComponent">
-  </ng-template>
-</div>
+<router-outlet></router-outlet>

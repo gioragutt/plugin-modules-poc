@@ -1,0 +1,10 @@
+<app-shell (formClick)="onFormClick($event)">
+  <div class="content">
+    <button mat-button (click)="load()">Load!!</button>
+    <mat-divider *ngIf="c.loaded"></mat-divider>
+    <div [class.loaded]="c.loaded">
+      <ng-template [libFormRegistryComponent]="selectedForm" #c="libFormRegistryComponent">
+      </ng-template>
+    </div>
+  </div>
+</app-shell>
