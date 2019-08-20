@@ -1,6 +1,6 @@
-import { Component, Type } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormEntry } from 'projects/forms-registry';
-import { SubmoduleLoaderService } from 'projects/submodules';
+import { FloatingFormsService } from 'src/app/floating-forms/floating-forms.service';
 
 @Component({
   selector: 'app-main-app-page',
@@ -8,9 +8,10 @@ import { SubmoduleLoaderService } from 'projects/submodules';
   styleUrls: ['./main-app-page.component.scss']
 })
 export class MainAppPageComponent {
-  selectedForm: Type<any>;
+  constructor(private floatingForms: FloatingFormsService) {
+  }
 
-  onFormClick(event: FormEntry): void {
-    this.selectedForm = event.component;
+  onFormClick(formEntry: FormEntry): void {
+    this.floatingForms.open(formEntry);
   }
 }

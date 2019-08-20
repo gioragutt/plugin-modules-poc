@@ -11,8 +11,10 @@ import {
   MatRadioModule,
   MatCardModule,
   MatMenuModule,
+  MatTabsModule,
 } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   exports: [
@@ -27,7 +29,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatRadioModule,
     MatCardModule,
     MatMenuModule,
+    MatTabsModule,
     ReactiveFormsModule,
+    DragDropModule,
   ]
 })
 export class MaterialModule { }

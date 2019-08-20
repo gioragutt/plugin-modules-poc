@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormEntry, FormsRegistryService } from 'projects/forms-registry';
 import { SubmoduleLoaderService } from 'projects/submodules';
-import { map, finalize, tap } from 'rxjs/operators';
-import { defer } from 'rxjs';
+import { map, finalize, tap, switchMap } from 'rxjs/operators';
+import { defer, timer } from 'rxjs';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 export function groupArrayBy<T, K>(keySelector: (t: T) => K): (values: T[]) => Record<any, T[]> {
   return (values: T[]) => {
@@ -29,6 +30,7 @@ export class ShellComponent {
 
   @Output() formClick = new EventEmitter<FormEntry>();
   loaded = false;
+  loading = false;
 
   constructor(
     private formsRegistry: FormsRegistryService,
@@ -36,12 +38,19 @@ export class ShellComponent {
   ) { }
 
   loadLazyModules() {
-    defer(() => {
-      this.loaded = false;
-      return this.loader.lazyLoadSubmodules();
-    }).pipe(
-      finalize(() => this.loaded = true),
+    this.loaded = false;
+    this.loading = true;
+    timer(1000).pipe(
+      switchMap(() => this.loader.lazyLoadSubmodules()),
+      finalize(() => {
+        this.loaded = true;
+        this.loading = false;
+      }),
       tap(module => console.log('Loaded', module.submodule.name)),
     ).subscribe();
+  }
+
+  onDrop(event: CdkDragDrop<any, any>) {
+    console.log(event);
   }
 }

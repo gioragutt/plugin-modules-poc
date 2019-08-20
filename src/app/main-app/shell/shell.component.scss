@@ -16,6 +16,12 @@
   z-index: 1;
 }
 
+.full-page {
+  height: calc(100% - 64px);
+  width: 100%;
+  background: url('/assets/map.png');
+}
+
 .page-content {
-  margin: 100px 100px;
+  margin: 0 100px;
 }
