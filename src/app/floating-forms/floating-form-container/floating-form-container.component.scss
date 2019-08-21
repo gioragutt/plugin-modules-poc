@@ -1,6 +1,7 @@
 .focused {
   box-shadow: 0px 0px 7px 1px rgba(0, 200, 255);
   outline: none;
+  z-index: 100;
 }
 
 .floating-form-container {

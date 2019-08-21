@@ -10,7 +10,6 @@ import { FloatingFormContainerComponent, TabSplitEvent } from './floating-form-c
 export class FloatingFormsService {
   private boundingView: ViewContainerRef;
   private renderer: Renderer2;
-  private zIndex = 100;
   private floatingContainers: ComponentRef<FloatingFormContainerComponent>[] = [];
   private floatingContainersCount = new BehaviorSubject<number>(0);
 
@@ -80,6 +79,5 @@ export class FloatingFormsService {
     const left = (boundingWidth / 2) - (containerWidth / 2);
     this.renderer.setStyle(containerElement, 'top', `${top}px`);
     this.renderer.setStyle(containerElement, 'left', `${left}px`);
-    this.renderer.setStyle(containerElement, 'z-index', this.zIndex++);
   }
 }
