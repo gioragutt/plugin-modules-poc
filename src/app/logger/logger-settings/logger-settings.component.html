@@ -1,0 +1,14 @@
+<mat-list class="container">
+  <mat-list-item *ngFor="let logger of loggers$ | async" class="line">
+    <span>{{logger.name}}</span>
+    <span style="flex: 1;"></span>
+    <app-logger-level-button [logger]="logger" [level]="LogLevel.Debug" color="primary" icon="info">
+    </app-logger-level-button>
+    <app-logger-level-button [logger]="logger" [level]="LogLevel.Warn" color="accent" icon="warning">
+    </app-logger-level-button>
+    <app-logger-level-button [logger]="logger" [level]="LogLevel.Error" color="warn" icon="info">
+    </app-logger-level-button>
+    <app-logger-level-button [logger]="logger" [level]="LogLevel.Disabled" color="warn" icon="highlight_off">
+    </app-logger-level-button>
+  </mat-list-item>
+</mat-list>

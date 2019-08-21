@@ -12,12 +12,15 @@ import {
   MatCardModule,
   MatMenuModule,
   MatTabsModule,
+  MatDialogModule,
 } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   exports: [
+    CommonModule,
     LayoutModule,
     MatToolbarModule,
     MatButtonModule,
@@ -32,6 +35,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatTabsModule,
     ReactiveFormsModule,
     DragDropModule,
+    MatDialogModule,
   ]
 })
 export class MaterialModule { }

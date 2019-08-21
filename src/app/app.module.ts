@@ -7,6 +7,7 @@ import { SharedModule } from './shared/shared.module';
 import { FormsRegistryModule } from 'projects/forms-registry';
 import { AppSubmodulesModule } from './app-submodules.module';
 import { FloatingFormsModule } from './floating-forms/floating-forms.module';
+import { LoggerModule } from './logger/logger.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { FloatingFormsModule } from './floating-forms/floating-forms.module';
     AppSubmodulesModule,
     FormsRegistryModule.forRoot(),
     FloatingFormsModule.forRoot(),
+    LoggerModule.forRoot(),
   ],
   bootstrap: [AppComponent]
 })

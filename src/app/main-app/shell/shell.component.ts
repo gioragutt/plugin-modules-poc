@@ -1,9 +1,10 @@
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormEntry, FormsRegistryService } from 'projects/forms-registry';
 import { SubmoduleLoaderService } from 'projects/submodules';
-import { map, finalize, tap, switchMap } from 'rxjs/operators';
-import { defer, timer } from 'rxjs';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { timer } from 'rxjs';
+import { finalize, map, switchMap, tap } from 'rxjs/operators';
+import { LoggerSettingsService } from 'src/app/logger/logger-settings.service';
 
 export function groupArrayBy<T, K>(keySelector: (t: T) => K): (values: T[]) => Record<any, T[]> {
   return (values: T[]) => {
@@ -35,6 +36,7 @@ export class ShellComponent {
   constructor(
     private formsRegistry: FormsRegistryService,
     private loader: SubmoduleLoaderService,
+    private loggerSettings: LoggerSettingsService,
   ) { }
 
   loadLazyModules() {
@@ -48,6 +50,10 @@ export class ShellComponent {
       }),
       tap(module => console.log('Loaded', module.submodule.name)),
     ).subscribe();
+  }
+
+  openSettings(): void {
+    this.loggerSettings.openSettings();
   }
 
   onDrop(event: CdkDragDrop<any, any>) {

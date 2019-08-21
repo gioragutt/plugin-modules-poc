@@ -2,6 +2,8 @@ import { Injectable, ViewContainerRef, Renderer2, ComponentRef, ComponentFactory
 import { FloatingFormContainerComponent, TabSplitEvent } from './floating-form-container/floating-form-container.component';
 import { BehaviorSubject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
+import { Logger } from '../logger/logger';
+import { LoggerService } from '../logger/logger.service';
 
 export type FloatingContainerRef = ComponentRef<FloatingFormContainerComponent>;
 
@@ -9,14 +11,20 @@ export type FloatingContainerRef = ComponentRef<FloatingFormContainerComponent>;
   providedIn: 'root'
 })
 export class FloatingContainersService {
+  private readonly logger: Logger;
   private boundingView: ViewContainerRef;
   private renderer: Renderer2;
   private floatingContainers: FloatingContainerRef[] = [];
   private floatingContainersCount = new BehaviorSubject<number>(0);
   private focusedContainer: FloatingContainerRef;
 
-  constructor(private resolver: ComponentFactoryResolver, rendererFactory: RendererFactory2) {
+  constructor(
+    private resolver: ComponentFactoryResolver,
+    rendererFactory: RendererFactory2,
+    loggerService: LoggerService
+  ) {
     this.renderer = rendererFactory.createRenderer(null, null);
+    this.logger = loggerService.get('FloatingContainersService');
   }
 
   setBoundingView(boundingView: ViewContainerRef): void {
@@ -61,12 +69,12 @@ export class FloatingContainersService {
 
   handleSplit({ formFromView, isLastTab }: TabSplitEvent, splitFrom: ComponentRef<FloatingFormContainerComponent>) {
     if (isLastTab) {
-      console.log(`Last tab of ${splitFrom.instance.id} split, disposing of container`);
+      this.logger.debug(`Last tab of ${splitFrom.instance.id} split, disposing of container`);
       this.disposeOfFloatingContainer(splitFrom);
     }
 
     if (this.floatingContainers.length === 0) {
-      console.error('Split called with only tab when there was just one floating container! This is a bug!');
+      this.logger.warn('Split called with only tab when there was just one floating container! This is a bug!');
       formFromView.viewRef.destroy();
       return;
     }
@@ -74,9 +82,9 @@ export class FloatingContainersService {
     for (const container of this.floatingContainers) {
       if (container !== splitFrom) {
         if (isLastTab) {
-          console.log(`Moving to ${container.instance.id} after ${splitFrom.instance.id} was disposed of`);
+          this.logger.debug(`Moving to ${container.instance.id} after ${splitFrom.instance.id} was disposed of`);
         } else {
-          console.log(`Splitting from ${splitFrom.instance.id} to existing(${container.instance.id})`);
+          this.logger.debug(`Splitting from ${splitFrom.instance.id} to existing(${container.instance.id})`);
         }
         container.instance.attach(formFromView);
         if (isLastTab) {
@@ -89,7 +97,7 @@ export class FloatingContainersService {
     }
 
     const attachingTo = this.createFloatingContainer();
-    console.log(`Splitting from ${splitFrom.instance.id} to new(${attachingTo.instance.id})`);
+    this.logger.debug(`Splitting from ${splitFrom.instance.id} to new(${attachingTo.instance.id})`);
     attachingTo.instance.attach(formFromView);
     this.focusOn(attachingTo);
   }
@@ -99,7 +107,7 @@ export class FloatingContainersService {
       this.focusedContainer = null;
     }
     const index = this.floatingContainers.indexOf(floatingContainerRef);
-    console.log(`Disposing of container ${floatingContainerRef.instance.id} from index ${index}`);
+    this.logger.debug(`Disposing of container ${floatingContainerRef.instance.id} from index ${index}`);
     floatingContainerRef.destroy();
     this.floatingContainers.splice(index, 1);
     this.floatingContainersCount.next(this.floatingContainersCount.value - 1);
