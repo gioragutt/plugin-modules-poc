@@ -8,7 +8,7 @@ export interface FormEntry<T = any> {
 
 export type FormEntries = FormEntry[];
 
-export interface FormFromView<T = any> {
+export interface FormEntryViewRef<T = any> {
   viewRef: ViewRef;
   formEntry: FormEntry<T>;
 }

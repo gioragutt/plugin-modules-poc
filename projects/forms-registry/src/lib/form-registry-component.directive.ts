@@ -1,21 +1,23 @@
-import { Directive, Input, Type, ViewContainerRef, ViewRef } from '@angular/core';
+import { Directive, Input, ViewContainerRef } from '@angular/core';
 import { FormsRegistryService } from './forms-registry.service';
-import { FormEntry, FormFromView } from './interfaces';
+import { FormEntry, FormEntryViewRef } from './interfaces';
 
 @Directive({
   selector: '[libFormRegistryComponent]',
   exportAs: 'libFormRegistryComponent',
 })
-export class FormRegistryComponentDirective<T> {
-  @Input() set fromComponent(c: Type<T>) {
-    setTimeout(() => this.createComponent(c), 0);
+export class FormRegistryComponentDirective {
+  @Input() set libFormRegistryComponent(formEntryViewRef: FormEntryViewRef) {
+    setTimeout(() => {
+      if (formEntryViewRef.viewRef) {
+        this.attachViewRef(formEntryViewRef);
+      } else {
+        this.createComponent(formEntryViewRef);
+      }
+    }, 0);
   }
 
-  @Input() set fromExisting(existing: FormFromView) {
-    setTimeout(() => this.attachViewRef(existing), 0);
-  }
-
-  currentEntry: FormEntry = null;
+  private currentEntry: FormEntry = null;
 
   get entry(): FormEntry {
     return this.currentEntry;
@@ -30,24 +32,25 @@ export class FormRegistryComponentDirective<T> {
     private formsRegistry: FormsRegistryService
   ) { }
 
-  detach(): ViewRef {
+  detach(): FormEntryViewRef {
     const viewRef = this.container.detach(0);
+    const formEntry = this.currentEntry;
     this.currentEntry = null;
-    return viewRef;
+    return { viewRef, formEntry };
   }
 
-  attachViewRef({ formEntry, viewRef }: FormFromView): void {
+  attachViewRef({ formEntry, viewRef }: FormEntryViewRef): void {
     this.container.clear();
     this.container.insert(viewRef);
     this.currentEntry = formEntry;
   }
 
-  createComponent(componentType: Type<any>): void {
+  createComponent(formEntryViewRef: FormEntryViewRef): void {
     this.container.clear();
     this.currentEntry = null;
-    if (componentType) {
-      const { componentFactory, formEntry } = this.formsRegistry.getEntry(componentType);
-      this.container.createComponent(componentFactory);
+    if (formEntryViewRef.formEntry.component) {
+      const { componentFactory, formEntry } = this.formsRegistry.getEntry(formEntryViewRef.formEntry.component);
+      formEntryViewRef.viewRef = this.container.createComponent(componentFactory).hostView;
       this.currentEntry = formEntry;
     }
   }

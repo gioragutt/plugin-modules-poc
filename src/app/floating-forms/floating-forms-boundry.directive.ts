@@ -1,5 +1,5 @@
-import { Directive, ViewContainerRef, ElementRef } from '@angular/core';
-import { FloatingFormsService } from './floating-forms.service';
+import { Directive, ViewContainerRef } from '@angular/core';
+import { FloatingContainersService } from './floating-containers.service';
 
 @Directive({
   selector: '[appFloatingFormsBoundry]',
@@ -7,7 +7,7 @@ import { FloatingFormsService } from './floating-forms.service';
 export class FloatingFormsBoundryDirective {
   constructor(
     container: ViewContainerRef,
-    floatingForms: FloatingFormsService
+    floatingForms: FloatingContainersService,
   ) {
     floatingForms.setBoundingView(container);
   }

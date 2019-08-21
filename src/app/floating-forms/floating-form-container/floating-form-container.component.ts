@@ -1,11 +1,12 @@
-import { Component, Input, Type, Output, EventEmitter, AfterViewInit, ViewRef, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output, QueryList, Type, ViewChildren, ViewRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { FormEntry, FormRegistryComponentDirective, FormFromView } from 'projects/forms-registry';
+import { FormEntry, FormEntryViewRef, FormRegistryComponentDirective } from 'projects/forms-registry';
 import { Observable } from 'rxjs';
 
-export type TabSplitEvent = FormFromView & {
+export interface TabSplitEvent {
+  formFromView: FormEntryViewRef;
   isLastTab: boolean;
-};
+}
 
 export interface ComponentTab {
   formEntry: FormEntry;
@@ -17,17 +18,27 @@ export interface ComponentTab {
   templateUrl: './floating-form-container.component.html',
   styleUrls: ['./floating-form-container.component.scss']
 })
-export class FloatingFormContainerComponent implements AfterViewInit {
+export class FloatingFormContainerComponent implements AfterViewInit, OnDestroy {
+  static idCounter = 0;
+  @ViewChildren(FormRegistryComponentDirective) registries: QueryList<FormRegistryComponentDirective>;
+
   @Input() formComponent: Type<any>;
+  @Input() openFloatingFormContainers$: Observable<number>;
+
   @Output() closed = new EventEmitter<void>();
   @Output() afterViewInit = new EventEmitter<void>();
-  @Input() openFloatingFormContainers$: Observable<number>;
   @Output() splitTab = new EventEmitter<TabSplitEvent>();
-  @ViewChildren(FormRegistryComponentDirective) registries: QueryList<FormRegistryComponentDirective<any>>;
+  @Output() gainFocus = new EventEmitter<void>();
+  @Output() destroyed = new EventEmitter<void>();
 
-  focused = true;
+  readonly id = FloatingFormContainerComponent.idCounter++;
+  focused = false;
   selected = new FormControl(0);
   componentTabs: ComponentTab[] = [];
+
+  ngOnDestroy() {
+    this.destroyed.emit();
+  }
 
   ngAfterViewInit(): void {
     this.afterViewInit.next();
@@ -37,23 +48,38 @@ export class FloatingFormContainerComponent implements AfterViewInit {
     this.addTab({ formEntry });
   }
 
-  closeTab() {
-    this.componentTabs.splice(this.selected.value, 1);
-    if (this.componentTabs.length === 0) {
+  onFocus() {
+    this.focused = true;
+  }
+
+  onFocusOut() {
+    this.focused = false;
+  }
+
+  closeCurrentTab(): boolean {
+    if (this.closeTab(this.selected.value)) {
       this.closed.emit();
+      return true;
+    }
+    return false;
+  }
+
+  split(index: number): void {
+    const formRegistryComponent = this.registries.toArray()[index];
+    const formFromView = formRegistryComponent.detach();
+    const isLastTab = this.closeTab(index);
+    this.splitTab.emit({ formFromView, isLastTab: this.componentTabs.length === 0 });
+    if (!isLastTab) {
+      this.selected.setValue(index);
     }
   }
 
-  split(index: number, formEntry: FormEntry): void {
-    const formRegistryComponent = this.registries.toArray()[index];
-    const viewRef = formRegistryComponent.detach();
-    const indexToReselect = indexToReselectAfterSplit(index);
-    this.closeTab();
-    this.splitTab.emit({ formEntry, viewRef, isLastTab: this.componentTabs.length === 0 });
-    this.selected.setValue(indexToReselect);
+  closeTab(index: number) {
+    this.componentTabs.splice(index, 1);
+    return this.componentTabs.length === 0;
   }
 
-  attach(event: TabSplitEvent) {
+  attach(event: FormEntryViewRef) {
     this.addTab(event);
   }
 
@@ -62,8 +88,3 @@ export class FloatingFormContainerComponent implements AfterViewInit {
     this.selected.setValue(this.componentTabs.length - 1);
   }
 }
-
-function indexToReselectAfterSplit(index: number) {
-  return index === 0 ? 0 : index - 1;
-}
-
