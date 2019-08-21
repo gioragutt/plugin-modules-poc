@@ -31,7 +31,6 @@ export class FloatingFormContainerComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.afterViewInit.next();
-    this.selected.valueChanges.subscribe(v => console.log('changed to', v));
   }
 
   addNewTab(formEntry: FormEntry) {
