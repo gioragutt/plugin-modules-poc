@@ -12,12 +12,13 @@ export interface LazySubmodule {
   loadChildren: LoadChildrenCallback;
   canLoad?: (Type<any> | InjectionToken<any>)[];
   name: string;
+  data?: any;
 }
 
 export type LazySubmodules = LazySubmodule[];
 
 export interface CanLoad {
-  canLoad(): boolean | Promise<boolean> | Observable<boolean>;
+  canLoad(submodule: LazySubmodule): boolean | Promise<boolean> | Observable<boolean>;
 }
 
 export interface SubmoduleProcessor {

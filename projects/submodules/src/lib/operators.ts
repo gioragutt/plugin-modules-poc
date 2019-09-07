@@ -28,7 +28,7 @@ function runCanActive(injector: Injector, submodule: LazySubmodule): Observable<
 
   const canLoadObservables = canLoadGuards.map(g => {
     if (isCanLoad(g)) {
-      return wrapIntoObservable(g.canLoad());
+      return wrapIntoObservable(g.canLoad(submodule));
     } else if (isFunction<() => boolean>(g)) {
       return wrapIntoObservable(g());
     } else {
