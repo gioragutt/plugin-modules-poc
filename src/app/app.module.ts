@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { FormsRegistryModule } from 'projects/forms-registry';
-import { AppSubmodulesModule } from './app-submodules.module';
+import { AppPluginsModule } from './app-plugins.module';
 import { FloatingFormsModule } from './floating-forms/floating-forms.module';
 import { LoggerModule } from './logger/logger.module';
 
@@ -18,7 +18,7 @@ import { LoggerModule } from './logger/logger.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule,
-    AppSubmodulesModule,
+    AppPluginsModule,
     FormsRegistryModule.forRoot(),
     FloatingFormsModule.forRoot(),
     LoggerModule.forRoot(),

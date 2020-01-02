@@ -1,5 +1,5 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { provideSubmoduleProcessor } from 'projects/submodules';
+import { providePluginProcessor } from 'projects/plugin-modules';
 import { FORM_ENTRIES } from './config';
 import { FormsRegistryProcessorService } from './forms-registry-processor.service';
 import { FormEntries } from './interfaces';
@@ -27,7 +27,7 @@ export class FormsRegistryModule {
     return {
       ngModule: FormsRegistryModule,
       providers: [
-        provideSubmoduleProcessor(FormsRegistryProcessorService),
+        providePluginProcessor(FormsRegistryProcessorService),
       ],
     };
   }

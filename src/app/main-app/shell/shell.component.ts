@@ -1,7 +1,7 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormEntry, FormsRegistryService } from 'projects/forms-registry';
-import { SubmoduleLoaderService } from 'projects/submodules';
+import { PluginModuleLoaderService } from 'projects/plugin-modules';
 import { timer } from 'rxjs';
 import { finalize, map, switchMap, tap } from 'rxjs/operators';
 import { LoggerSettingsService } from 'src/app/logger/logger-settings.service';
@@ -35,7 +35,7 @@ export class ShellComponent {
 
   constructor(
     private formsRegistry: FormsRegistryService,
-    private loader: SubmoduleLoaderService,
+    private loader: PluginModuleLoaderService,
     private loggerSettings: LoggerSettingsService,
   ) { }
 
@@ -43,12 +43,12 @@ export class ShellComponent {
     this.loaded = false;
     this.loading = true;
     timer(1000).pipe(
-      switchMap(() => this.loader.lazyLoadSubmodules()),
+      switchMap(() => this.loader.loadLazyPluginModules()),
       finalize(() => {
         this.loaded = true;
         this.loading = false;
       }),
-      tap(module => console.log('Loaded', module.submodule.name)),
+      tap(module => console.log('Loaded', module.module.name)),
     ).subscribe();
   }
 

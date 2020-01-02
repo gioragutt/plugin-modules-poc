@@ -14,8 +14,8 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"],
     "paths": {
-      "submodules": ["dist/submodules"],
-      "submodules/*": ["dist/submodules/*"],
+      "plugin-modules": ["dist/plugin-modules"],
+      "plugin-modules/*": ["dist/plugin-modules/*"],
       "forms-registry": ["dist/forms-registry"],
       "forms-registry/*": ["dist/forms-registry/*"]
     }

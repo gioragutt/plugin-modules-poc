@@ -1,6 +1,6 @@
 import { Injectable, Inject, NgModuleRef } from '@angular/core';
-import { SubmoduleProcessor } from './interfaces';
-import { SUBMOUDLE_PROCESSORS } from './config';
+import { PluginProcessor } from './interfaces';
+import { PLUGIN_PROCESSORS } from './config';
 import { Observable, from } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { wrapIntoObservable } from './utils/collections';
@@ -8,15 +8,15 @@ import { wrapIntoObservable } from './utils/collections';
 @Injectable({
   providedIn: 'root'
 })
-export class SubmodulesProcessorsService {
-  submoduleProcessors: SubmoduleProcessor[];
+export class PluginProcessorsService {
+  pluginProcessors: PluginProcessor[];
 
-  constructor(@Inject(SUBMOUDLE_PROCESSORS) submoduleProcessors: SubmoduleProcessor[]) {
-    this.submoduleProcessors = submoduleProcessors;
+  constructor(@Inject(PLUGIN_PROCESSORS) pluginProcessors: PluginProcessor[]) {
+    this.pluginProcessors = pluginProcessors;
   }
 
   process(moduleRef: NgModuleRef<any>): Observable<void> {
-    return from(this.submoduleProcessors).pipe(
+    return from(this.pluginProcessors).pipe(
       mergeMap(processor => wrapIntoObservable(processor.process(moduleRef))),
     );
   }

@@ -3,24 +3,24 @@ import { LoadChildrenCallback } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MaybeAsync } from './utils/collections';
 
-export interface SubmoduleRootModuleConfig {
+export interface PluginModuleConfig {
   lazyLoadImmediately?: boolean;
   boostrapImmediately?: boolean;
 }
 
-export interface LazySubmodule {
+export interface LazyPluginModule {
   loadChildren: LoadChildrenCallback;
   canLoad?: (Type<any> | InjectionToken<any>)[];
   name: string;
   data?: any;
 }
 
-export type LazySubmodules = LazySubmodule[];
+export type LazyPluginModules = LazyPluginModule[];
 
 export interface CanLoad {
-  canLoad(submodule: LazySubmodule): boolean | Promise<boolean> | Observable<boolean>;
+  canLoad(module: LazyPluginModule): boolean | Promise<boolean> | Observable<boolean>;
 }
 
-export interface SubmoduleProcessor {
+export interface PluginProcessor {
   process(moduleRef: NgModuleRef<any>): MaybeAsync<void>;
 }

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormEntries, FormsRegistryModule } from 'projects/forms-registry';
-import { SubmodulesModule } from 'projects/submodules';
+import { PluginsModule } from 'projects/plugin-modules';
 import { Feature1FormComponent } from './feature1-form/feature1-form.component';
 
 const forms: FormEntries = [
@@ -17,7 +17,7 @@ const forms: FormEntries = [
   imports: [
     CommonModule,
     FormsRegistryModule.forFeature(forms),
-    SubmodulesModule.forFeature(),
+    PluginsModule.forFeature(),
   ],
   entryComponents: [Feature1FormComponent],
 })

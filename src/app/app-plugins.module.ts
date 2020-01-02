@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-import { LazySubmodules, SubmodulesModule } from 'projects/submodules';
+import { LazyPluginModules, PluginsModule } from 'projects/plugin-modules';
 
-export const features: LazySubmodules = [
+export const features: LazyPluginModules = [
   {
     loadChildren: () => import('./feature1/feature1.module').then(m => m.Feature1Module),
     name: 'feature1',
@@ -14,9 +14,9 @@ export const features: LazySubmodules = [
 
 @NgModule({
   imports: [
-    SubmodulesModule.forRoot(features, {
+    PluginsModule.forRoot(features, {
       lazyLoadImmediately: false,
     })
   ],
 })
-export class AppSubmodulesModule { }
+export class AppPluginsModule { }

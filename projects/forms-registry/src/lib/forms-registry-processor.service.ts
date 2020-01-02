@@ -1,6 +1,6 @@
 import { ComponentFactoryResolver, Injectable, NgModuleRef } from '@angular/core';
-import { SubmoduleProcessor } from 'projects/submodules';
-import { MaybeAsync } from 'projects/submodules/src/lib/utils/collections';
+import { PluginProcessor } from 'projects/plugin-modules';
+import { MaybeAsync } from 'projects/plugin-modules/src/lib/utils/collections';
 import { FORM_ENTRIES } from './config';
 import { FormsRegistryService } from './forms-registry.service';
 import { FormEntries } from './interfaces';
@@ -12,7 +12,7 @@ function flatten<T>(arr: T[][]): T[] {
 @Injectable({
   providedIn: 'root'
 })
-export class FormsRegistryProcessorService implements SubmoduleProcessor {
+export class FormsRegistryProcessorService implements PluginProcessor {
   constructor(private formsRegistry: FormsRegistryService) { }
 
   process(moduleRef: NgModuleRef<any>): MaybeAsync<void> {

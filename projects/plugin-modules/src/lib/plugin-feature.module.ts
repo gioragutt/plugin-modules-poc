@@ -1,11 +1,11 @@
 import { NgModule, NgModuleRef } from '@angular/core';
-import { SubmoduleRootModule } from './submodule-root.module';
+import { PluginRootModule } from './plugin-root.module';
 
 @NgModule()
-export class SubmoduleFeatureModule {
+export class PluginFeatureModule {
   constructor(
     moduleRef: NgModuleRef<any>,
-    root: SubmoduleRootModule
+    root: PluginRootModule
   ) {
     root.registerFeature(moduleRef);
   }

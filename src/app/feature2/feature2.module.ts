@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Feature2PageComponent } from './feature2-page/feature2-page.component';
 import { FormEntries, FormsRegistryModule } from 'projects/forms-registry';
-import { SubmodulesModule } from 'projects/submodules';
+import { PluginsModule } from 'projects/plugin-modules';
 
 const forms: FormEntries = [
   {
@@ -22,7 +22,7 @@ const forms: FormEntries = [
   imports: [
     CommonModule,
     FormsRegistryModule.forFeature(forms),
-    SubmodulesModule.forFeature(),
+    PluginsModule.forFeature(),
   ],
   entryComponents: [Feature2PageComponent],
 })
