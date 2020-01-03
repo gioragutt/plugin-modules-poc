@@ -1,11 +1,13 @@
-import { Injectable, ViewContainerRef, Renderer2, ComponentRef, ComponentFactoryResolver, RendererFactory2 } from '@angular/core';
-import { FloatingFormContainerComponent, TabSplitEvent } from './floating-form-container/floating-form-container.component';
+import { ComponentFactoryResolver, ComponentRef, Injectable, Renderer2, RendererFactory2, ViewContainerRef } from '@angular/core';
+import { FormEntryViewRef } from 'projects/forms-registry';
 import { BehaviorSubject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
 import { Logger } from '../logger/logger';
 import { LoggerService } from '../logger/logger.service';
+import { FloatingFormContainer, TabSplitEvent } from './floating-form-container';
+import { FloatingFormContainerComponent } from './floating-form-container/floating-form-container.component';
 
-export type FloatingContainerRef = ComponentRef<FloatingFormContainerComponent>;
+export type FloatingContainerRef = ComponentRef<FloatingFormContainer>;
 
 @Injectable({
   providedIn: 'root'
@@ -35,18 +37,25 @@ export class FloatingContainersService {
     return this.focusedContainer || this.floatingContainers[0] || this.createFloatingContainer();
   }
 
-  private createFloatingContainer() {
+  private updateContainersCount(): void {
+    this.floatingContainersCount.next(this.floatingContainers.length);
+  }
+
+  private createFloatingContainer(): FloatingContainerRef {
     const componentFactory = this.resolver.resolveComponentFactory(FloatingFormContainerComponent);
     const componentRef = this.boundingView.createComponent(componentFactory);
 
     this.initializeFloatingContainer(componentRef);
 
     this.floatingContainers.push(componentRef);
-    this.floatingContainersCount.next(this.floatingContainersCount.value + 1);
+    this.updateContainersCount();
+
+    this.logger.debug(`Created new floating container(${componentRef.instance.id})`);
+
     return componentRef;
   }
 
-  private initializeFloatingContainer(componentRef: ComponentRef<FloatingFormContainerComponent>) {
+  private initializeFloatingContainer(componentRef: FloatingContainerRef) {
     const floatingContainer = componentRef.instance;
 
     const untilDestroyed = takeUntil(floatingContainer.destroyed);
@@ -67,7 +76,7 @@ export class FloatingContainersService {
       .subscribe(() => this.focusOn(componentRef));
   }
 
-  handleSplit({ formFromView, isLastTab }: TabSplitEvent, splitFrom: ComponentRef<FloatingFormContainerComponent>) {
+  handleSplit({ formFromView, isLastTab }: TabSplitEvent, splitFrom: FloatingContainerRef) {
     if (isLastTab) {
       this.logger.debug(`Last tab of ${splitFrom.instance.id} split, disposing of container`);
       this.disposeOfFloatingContainer(splitFrom);
@@ -79,27 +88,41 @@ export class FloatingContainersService {
       return;
     }
 
-    for (const container of this.floatingContainers) {
-      if (container !== splitFrom) {
-        if (isLastTab) {
-          this.logger.debug(`Moving to ${container.instance.id} after ${splitFrom.instance.id} was disposed of`);
-        } else {
-          this.logger.debug(`Splitting from ${splitFrom.instance.id} to existing(${container.instance.id})`);
-        }
-        container.instance.attach(formFromView);
-        if (isLastTab) {
-          this.focusOn(container);
-        } else {
-          this.focusOn(splitFrom);
-        }
-        return;
-      }
+    const containerToMoveTo = this.floatingContainers.filter(c => c !== splitFrom)[0];
+    if (containerToMoveTo) {
+      this.moveToExistingContainer(isLastTab, containerToMoveTo, splitFrom, formFromView);
+    } else {
+      this.moveToNewContainer(splitFrom, formFromView);
     }
+  }
 
+  private moveToNewContainer(splitFrom: FloatingContainerRef, formFromView: FormEntryViewRef<any>) {
     const attachingTo = this.createFloatingContainer();
     this.logger.debug(`Splitting from ${splitFrom.instance.id} to new(${attachingTo.instance.id})`);
     attachingTo.instance.attach(formFromView);
     this.focusOn(attachingTo);
+  }
+
+  private moveToExistingContainer(
+    isLastTab: boolean,
+    moveTo: FloatingContainerRef,
+    splitFrom: FloatingContainerRef,
+    formFromView: FormEntryViewRef<any>,
+  ) {
+
+    if (isLastTab) {
+      this.logger.debug(`Moving to ${moveTo.instance.id} after ${splitFrom.instance.id} was disposed of`);
+    } else {
+      this.logger.debug(`Splitting from ${splitFrom.instance.id} to existing(${moveTo.instance.id})`);
+    }
+
+    moveTo.instance.attach(formFromView);
+
+    if (isLastTab) {
+      this.focusOn(moveTo);
+    } else {
+      this.focusOn(splitFrom);
+    }
   }
 
   private disposeOfFloatingContainer(floatingContainerRef: FloatingContainerRef) {
@@ -110,13 +133,14 @@ export class FloatingContainersService {
     this.logger.debug(`Disposing of container ${floatingContainerRef.instance.id} from index ${index}`);
     floatingContainerRef.destroy();
     this.floatingContainers.splice(index, 1);
-    this.floatingContainersCount.next(this.floatingContainersCount.value - 1);
+    this.updateContainersCount();
   }
 
   private centerCreatedComponent(floatingContainerRef: FloatingContainerRef) {
     const containerElement = floatingContainerRef.location.nativeElement.firstChild;
     const { offsetHeight: containerHeight, offsetWidth: containerWidth } = containerElement;
-    const { offsetTop, offsetHeight: boundingHeight, offsetWidth: boundingWidth } = this.boundingView.element.nativeElement.parentNode;
+    const { offsetTop, offsetHeight: boundingHeight, offsetWidth: boundingWidth } =
+      this.boundingView.element.nativeElement.parentNode;
     const top = offsetTop + (boundingHeight / 2) - (containerHeight / 2);
     const left = (boundingWidth / 2) - (containerWidth / 2);
     this.renderer.setStyle(containerElement, 'top', `${top}px`);
