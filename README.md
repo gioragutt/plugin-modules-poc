@@ -112,7 +112,6 @@ Feature Modules expose forms to the registry via a `forFeature` import:
     ]), // expose api
     PluginsModule.forFeature() // register as module that exposes api via plugins
   ],
-  entryComponents: [Feature1FormComponent]
 })
 export class Feature1Module {}
 ```

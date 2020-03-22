@@ -24,6 +24,5 @@ const forms: FormEntries = [
     FormsRegistryModule.forFeature(forms),
     PluginsModule.forFeature(),
   ],
-  entryComponents: [Feature2PageComponent],
 })
 export class Feature2Module { }

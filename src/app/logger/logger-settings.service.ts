@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { LoggerSettingsComponent } from './logger-settings/logger-settings.component';
 
 @Injectable({

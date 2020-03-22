@@ -19,6 +19,5 @@ const forms: FormEntries = [
     FormsRegistryModule.forFeature(forms),
     PluginsModule.forFeature(),
   ],
-  entryComponents: [Feature1FormComponent],
 })
 export class Feature1Module { }

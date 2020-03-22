@@ -10,7 +10,6 @@ import { FloatingFormsService } from './floating-forms.service';
   declarations: [FloatingFormContainerComponent, FloatingFormsBoundryDirective],
   imports: [MaterialModule, FormsRegistryModule, CommonModule],
   exports: [FloatingFormsBoundryDirective],
-  entryComponents: [FloatingFormContainerComponent],
 })
 export class FloatingFormsModule {
   static forRoot(): ModuleWithProviders<FloatingFormsModule> {

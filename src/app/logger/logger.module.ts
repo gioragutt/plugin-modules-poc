@@ -9,7 +9,6 @@ import { LoggerSettingsService } from './logger-settings.service';
   declarations: [LoggerSettingsComponent, LoggerLevelButtonComponent],
   imports: [MaterialModule],
   exports: [LoggerSettingsComponent],
-  entryComponents: [LoggerSettingsComponent],
 })
 export class LoggerModule {
   static forRoot(): ModuleWithProviders<LoggerModule> {
