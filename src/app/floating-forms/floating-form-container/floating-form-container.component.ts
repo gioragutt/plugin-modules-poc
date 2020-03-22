@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, EventEmitter, OnDestroy, Output, QueryList, ViewChildren, ViewRef } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { FormEntry, FormEntryViewRef, FormRegistryComponentDirective } from 'projects/forms-registry';
 import { Observable } from 'rxjs';
 import { FloatingFormContainer, TabSplitEvent } from '../floating-form-container';
@@ -29,7 +28,7 @@ export class FloatingFormContainerComponent implements AfterViewInit, OnDestroy,
   openFloatingFormContainers$: Observable<number>;
 
   focused = false;
-  selected = new FormControl(0);
+  selected = 0;
   componentTabs: ComponentTab[] = [];
 
   ngOnDestroy() {
@@ -53,7 +52,7 @@ export class FloatingFormContainerComponent implements AfterViewInit, OnDestroy,
   }
 
   closeCurrentTab(): void {
-    if (this.closeTab(this.selected.value)) {
+    if (this.closeTab(this.selected)) {
       this.closed.emit();
     }
   }
@@ -64,7 +63,7 @@ export class FloatingFormContainerComponent implements AfterViewInit, OnDestroy,
     const isLastTab = this.closeTab(index);
     this.splitTab.emit({ formFromView, isLastTab });
     if (!isLastTab) {
-      this.selected.setValue(index);
+      this.selected = index;
     }
   }
 
@@ -79,6 +78,6 @@ export class FloatingFormContainerComponent implements AfterViewInit, OnDestroy,
 
   private addTab(event: ComponentTab) {
     this.componentTabs.push(event);
-    this.selected.setValue(this.componentTabs.length - 1);
+    this.selected = this.componentTabs.length - 1;
   }
 }
