@@ -1,5 +1,7 @@
 # LazyLoadingModules
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/5ae923cb-3ac2-4c31-9c63-9e5274135f10/deploy-status)](https://app.netlify.com/sites/plugin-modules/deploys)
+
 ## Purpose
 
 The purpose of this repository is to present a POC of a plugin system, and provide a way for these modules to expose API in a unified way.
