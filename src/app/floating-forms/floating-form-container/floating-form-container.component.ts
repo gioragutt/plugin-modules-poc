@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, OnDestroy, Output, QueryList, ViewChildren, ViewRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, OnDestroy, Output, QueryList, ViewChildren, ViewRef } from '@angular/core';
 import { FormEntry, FormEntryViewRef, FormRegistryComponentDirective } from 'projects/forms-registry';
 import { Observable } from 'rxjs';
 import { FloatingFormContainer, TabSplitEvent } from '../floating-form-container';
@@ -16,7 +16,8 @@ export interface ComponentTab {
 export class FloatingFormContainerComponent implements AfterViewInit, OnDestroy, FloatingFormContainer {
   private static idCounter = 0;
 
-  @ViewChildren(FormRegistryComponentDirective) private registries: QueryList<FormRegistryComponentDirective>;
+  @ViewChildren(FormRegistryComponentDirective)
+  private tabs: QueryList<FormRegistryComponentDirective>;
 
   @Output() readonly closed = new EventEmitter<void>();
   @Output() readonly afterViewInit = new EventEmitter<void>();
@@ -31,12 +32,16 @@ export class FloatingFormContainerComponent implements AfterViewInit, OnDestroy,
   selected = 0;
   componentTabs: ComponentTab[] = [];
 
+  constructor(private cdr: ChangeDetectorRef) { }
+
   ngOnDestroy() {
     this.destroyed.emit();
+    this.destroyed.complete();
   }
 
   ngAfterViewInit(): void {
-    this.afterViewInit.next();
+    this.afterViewInit.emit();
+    this.afterViewInit.complete();
   }
 
   addNewTab(formEntry: FormEntry) {
@@ -54,12 +59,15 @@ export class FloatingFormContainerComponent implements AfterViewInit, OnDestroy,
   closeCurrentTab(): void {
     if (this.closeTab(this.selected)) {
       this.closed.emit();
+      this.closed.complete();
     }
   }
 
   split(index: number): void {
-    const formRegistryComponent = this.registries.toArray()[index];
-    const formFromView = formRegistryComponent.detach();
+    const tab = this.tabs.toArray()[index];
+    console.log(this.tabs.length);
+    const formFromView = tab.detach();
+    console.log(this.tabs.length);
     const isLastTab = this.closeTab(index);
     this.splitTab.emit({ formFromView, isLastTab });
     if (!isLastTab) {
@@ -79,5 +87,6 @@ export class FloatingFormContainerComponent implements AfterViewInit, OnDestroy,
   private addTab(event: ComponentTab) {
     this.componentTabs.push(event);
     this.selected = this.componentTabs.length - 1;
+    this.cdr.detectChanges();
   }
 }
