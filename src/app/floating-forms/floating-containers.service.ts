@@ -140,7 +140,7 @@ export class FloatingContainersService {
     const containerElement = floatingContainerRef.location.nativeElement.firstChild;
     const { offsetHeight: containerHeight, offsetWidth: containerWidth } = containerElement;
     const { offsetTop, offsetHeight: boundingHeight, offsetWidth: boundingWidth } =
-      this.boundingView.element.nativeElement.parentNode;
+      this.boundingView.element.nativeElement;
     const top = offsetTop + (boundingHeight / 2) - (containerHeight / 2);
     const left = (boundingWidth / 2) - (containerWidth / 2);
     this.renderer.setStyle(containerElement, 'top', `${top}px`);
