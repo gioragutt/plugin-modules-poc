@@ -11,6 +11,7 @@ import { wrapIntoObservable } from './utils/collections';
 })
 export class PluginModuleLoaderService {
   private didLazyLoad = false;
+
   constructor(
     private injector: Injector,
     private compiler: Compiler,
@@ -20,6 +21,7 @@ export class PluginModuleLoaderService {
     if (this.didLazyLoad) {
       return EMPTY;
     }
+
     const lazyPluginModules = this.injector.get(LAZY_PLUGIN_MODULES);
     return from(lazyPluginModules).pipe(
       mergeMap(m => this.loadModule(m)),
